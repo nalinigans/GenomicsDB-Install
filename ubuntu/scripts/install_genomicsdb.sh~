@@ -22,7 +22,7 @@ install_prerequisites_ubuntu() {
 }
 
 install_genomicsdb_ubuntu() {
-	git clone https://github.com/GenomicsDB/GenomicsDB -b nalini_macos $GENOMICSDB_DIR &&
+	git clone https://github.com/GenomicsDB/GenomicsDB $GENOMICSDB_DIR &&
 	pushd $GENOMICSDB_DIR && git submodule update --recursive --init && popd &&
 	mkdir $GENOMICSDB_BUILD_DIR &&
 	pushd $GENOMICSDB_BUILD_DIR &&
@@ -34,11 +34,6 @@ install_genomicsdb_ubuntu() {
 	popd
 }
 
-case `uname` in
-	Linux )
-		which apt-get && install_prerequistes_ubuntu && install_genomicsdb_ubuntu
-		which yum && install_prerequistes_centos && install_genomicsdb_centos
-		;;
-	Darwin )
-		install_prerequistes_macos && install_genomicsdb_os
+echo $HOME
+which apt-get && install_prerequisites_ubuntu && install_genomicsdb_ubuntu
 
