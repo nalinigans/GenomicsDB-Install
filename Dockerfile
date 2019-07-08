@@ -1,3 +1,4 @@
+
 # The MIT License (MIT)
 # Copyright (c) 2019 Omics Data Automation, Inc.
 #
@@ -18,10 +19,18 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-# Description: Docker file for GenomicsDB for Ubuntu Trusty distro
+# Description: Docker file for building and installing GenomicsDB
 
-FROM ubuntu:trusty
+# OS'es currently tested are ubuntu:trusty and centos:7
+ARG os=ubuntu:trusty
 
-ADD . /ubuntu
-WORKDIR /ubuntu
-RUN scripts/install_genomicsdb.sh
+ARG branch=master
+ARG user=genomicsdb
+ARG install_dir=/usr/local
+ARG bindings
+
+FROM $os
+
+WORKDIR /build
+ADD scripts /build
+RUN ./install_genomicsdb.sh
