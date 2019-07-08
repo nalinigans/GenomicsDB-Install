@@ -17,4 +17,3 @@ To run:
 ```
  docker run -it genomicsdb:develop
 ```
-
