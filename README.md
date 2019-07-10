@@ -1,5 +1,5 @@
 # GenomicsDB-Install
-Experimental scripts to build and install [GenpmicsDB](https://github.com/GenomicsDB/GenomicsDB). Support initially only for ubuntu.
+Experimental scripts to build and install [GenomicsDB](https://github.com/GenomicsDB/GenomicsDB). Support initially only for ubuntu.
 
 ## With Docker
 To build and install GenomicsDB using Docker, specify the following optional build arguments
@@ -7,7 +7,7 @@ To build and install GenomicsDB using Docker, specify the following optional bui
   | Build Argument | Default |
   | --- | --- |
   | os=ubuntu:trusty|centos:7|<any linux base> | ubuntu:trusty |
-  | user=<username> | genomicdb |
+  | user=<user_name> | genomicdb |
   | branch=master|develop|<any_branch> | master |
   | install_dir=<my_install_dir> | /usr/local |
   | enable_bindings=java,r,python | none |
@@ -23,7 +23,7 @@ To run:
 ```
 
 ## Directly from bash
-The two scripts [install_prereqs.sh](scripts/prereqs/install_prereqs.sh) and [install_genomicsdb.sh](scripts/install_genomicsdb.sh) will work on any Linux OS from a bash command line without Docker.
+The two scripts [install_prereqs.sh](scripts/prereqs/install_prereqs.sh) and [install_genomicsdb.sh](scripts/install_genomicsdb.sh) will work on any Linux OS from a bash shell without Docker.
 
 ```bash
 git clone https://github.com/GenomicsDB/GenomicsDB-Install.git
