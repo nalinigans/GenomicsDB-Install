@@ -6,6 +6,7 @@ To build and install GenomicsDB, specify the following optional build arguments
   branch=master|develop|<any_branch>         # default is master
   install_dir=<my_install_dir>               # default is /usr/local
   enable_bindings=java,r,python              # default is none
+  
 ```
 git clone https://github.com/GenomicsDB/GenomicsDB-Install.git
 docker build --build-arg os=ubuntu branch=develop install_dir=/home/$USER -t genomicsdb:develop
