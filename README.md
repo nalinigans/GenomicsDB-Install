@@ -3,7 +3,7 @@ Experimental scripts to build and install GenomicsDB. Support initially only for
 
 To build and install GenomicsDB, specify the following optional build arguments
 
-  | Argument | Default |
+  | Build Argument | Default |
   | --- | --- |
   | os=ubuntu:trusty|centos:7|<any linux base> | ubuntu:trusty |
   | branch=master|develop|<any_branch> | master |
