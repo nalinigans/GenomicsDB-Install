@@ -1,4 +1,3 @@
-
 # The MIT License (MIT)
 # Copyright (c) 2019 Omics Data Automation, Inc.
 #
@@ -23,14 +22,23 @@
 
 # OS'es currently tested are ubuntu:trusty and centos:7
 ARG os=ubuntu:trusty
+FROM $os
 
 ARG branch=master
 ARG user=genomicsdb
 ARG install_dir=/usr/local
-ARG bindings
+ARG enable_bindings="java"
 
-FROM $os
-
+COPY scripts/prereqs /build
 WORKDIR /build
-ADD scripts /build
-RUN ./install_genomicsdb.sh
+RUN ./install_prereqs.sh
+
+RUN groupadd -r genomicsdb && useradd -r -g genomicsdb -m ${user} -p ${user}
+
+COPY scripts/install_genomicsdb.sh /build
+WORKDIR /build
+RUN ./install_genomicsdb.sh ${user} ${branch} ${install_dir} ${enable_bindings}
+
+EXPOSE 22
+USER ${user}
+ENTRYPOINT ["/bin/bash", "--login"]
