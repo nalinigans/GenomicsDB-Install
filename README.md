@@ -1,7 +1,8 @@
 # GenomicsDB-Install
 Experimental scripts to build and install GenomicsDB. Support initially only for ubuntu.
 
-To build and install GenomicsDB, specify the following optional build arguments
+## With Docker
+To build and install GenomicsDB using Docker, specify the following optional build arguments
 
   | Build Argument | Default |
   | --- | --- |
@@ -19,3 +20,6 @@ To run:
 ```
  docker run -it genomicsdb:develop
 ```
+
+## Directly from bash
+The two scripts [install_prereqs.sh](scripts/prereqs/install_prereq.sh) and [install_genomicsdb.sh](scripts/install_genomicsdb.sh) will work on any Linux OS from a bash command line without Docker.
