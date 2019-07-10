@@ -21,13 +21,18 @@
 # Description: Docker file for building and installing GenomicsDB
 
 # OS'es currently tested are ubuntu:trusty and centos:7
-ARG os=ubuntu:trusty
+#ARG os=ubuntu:trusty
+ARG os=centos:7
 FROM $os
 
 ARG branch=master
 ARG user=genomicsdb
 ARG install_dir=/usr/local
-ARG enable_bindings="java"
+#Options to enable_bindings are java, python and r - all separated by comma
+#e.g. enable_bindings="java"
+#     enable_bindings="java,r"
+#     enable_bindings="r,python"
+ARG enable_bindings=""
 
 COPY scripts/prereqs /build
 WORKDIR /build

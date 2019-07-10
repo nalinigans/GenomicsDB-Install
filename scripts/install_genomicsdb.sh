@@ -6,7 +6,7 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-GENOMICSDB_USER=$1
+GENOMICSDB_USER=${1:-genomicsdb}
 GENOMICSDB_BRANCH=${2:-master}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
 
@@ -37,8 +37,9 @@ setup_genomicsdb_env() {
 	GENOMICSDB_ENV=/etc/profile.d/genomicsdb_env.sh
 	echo "export GENOMICSDB_HOME=$GENOMICSDB_INSTALL_DIR" > $GENOMICSDB_ENV
 	if [[ $GENOMICSDB_INSTALL_DIR != "/usr" ]] &&  [[ $GENOMICSDB_INSTALL_DIR != "/usr/local" ]]; then
-			echo "export PATH=\$GENOMICSDB_HOME/bin:\$PATH" >> $GENOMICSDB_ENV
-			echo "export LD_LIBRARY_PATH=\$GENOMICSDB_HOME/lib:\$LD_IBRARY_PATH" >> $GENOMICSDB_ENV
+		echo "export PATH=\$GENOMICSDB_HOME/bin:\$PATH" >> $GENOMICSDB_ENV
+		echo "export LD_LIBRARY_PATH=\$GENOMICSDB_HOME/lib:\$LD_IBRARY_PATH" >> $GENOMICSDB_ENV
+		echo "export C_INCLUDE_PATH=\$GENOMICSDB_HOME/include" >> $GENOMICSDB_ENV
 	fi
 	if [ $BUILD_JAVA = 1 ]; then
 			echo "export CLASSPATH=\$GENOMICSDB_HOME/bin:\$CLASSPATH" >> $GENOMICSDB_ENV

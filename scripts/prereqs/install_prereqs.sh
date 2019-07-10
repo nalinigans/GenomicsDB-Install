@@ -37,8 +37,8 @@ install_protobuf() {
 install_os_prerequisites() {
 	case `uname` in
 		Linux )
-			which apt-get && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
-			#			which yum && source install_centos_prereqs.sh && install_prerequisites_centos
+			apt-get && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
+			yum version && source install_centos_prereqs.sh && install_prerequisites_centos
 			;;
 		Darwin )
 			echo "Mac OS not yet supported"
@@ -48,9 +48,9 @@ install_os_prerequisites() {
 
 install_prerequisites() {
 	install_os_prerequisites &&
+	source $PREREQS_ENV &&
 	install_mvn &&
-	install_protobuf &&
-	source $PREREQS_ENV
+	install_protobuf
 }
 
 install_prerequisites
