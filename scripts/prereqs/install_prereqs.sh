@@ -34,11 +34,18 @@ install_protobuf() {
 	popd
 }
 
+apt_get_install() {
+	apt-get --version && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
+}
+
+yum_install() {
+	yum version && source install_centos_prereqs.sh && install_prerequisites_centos
+}
+
 install_os_prerequisites() {
 	case `uname` in
 		Linux )
-			apt-get --version && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
-			yum version && source install_centos_prereqs.sh && install_prerequisites_centos
+			apt_get_install || yum_install
 			;;
 		Darwin )
 			echo "Mac OS not yet supported"
