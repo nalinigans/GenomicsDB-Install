@@ -37,7 +37,7 @@ install_protobuf() {
 install_os_prerequisites() {
 	case `uname` in
 		Linux )
-			apt-get && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
+			apt-get --version && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
 			yum version && source install_centos_prereqs.sh && install_prerequisites_centos
 			;;
 		Darwin )
