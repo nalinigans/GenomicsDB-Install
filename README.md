@@ -26,7 +26,7 @@ To run and enter the bash shell:
 The two scripts [install_prereqs.sh](scripts/prereqs/install_prereqs.sh) and [install_genomicsdb.sh](scripts/install_genomicsdb.sh) will work on any Linux OS from a bash shell without Docker.
 
 ```bash
-git clone https://github.com/GenomicsDB/GenomicsDB-Install.git
+git clone https://github.com/nalinigans/GenomicsDB-Install.git
 sudo scripts/prereqs/install_prereqs.sh # This will install all the prerequisites necessary to build genomicsdb
 scripts/install_genomicsdb.sh $USER <branch> <install_dir> <enable_bindings> # Arguments are optional
 cd ~$USER/GenomicsDB # To browse through the GenomicsDB source
