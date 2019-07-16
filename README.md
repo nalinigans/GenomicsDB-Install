@@ -14,7 +14,8 @@ To build and install GenomicsDB using Docker, specify the following optional bui
   
 ```
 git clone https://github.com/nalinigans/GenomicsDB-Install.git
-docker build --build-arg os=ubuntu branch=develop install_dir=/home/$USER -t genomicsdb:develop
+cd GenomicsDB-Install
+docker build --build-arg os=ubuntu branch=develop install_dir=/home/$USER -t genomicsdb:develop . 
 ```
 
 To run and enter the bash shell:
