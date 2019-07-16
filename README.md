@@ -13,7 +13,7 @@ To build and install GenomicsDB using Docker, specify the following optional bui
   | enable_bindings=java,r,python | none |
   
 ```
-git clone https://github.com/GenomicsDB/GenomicsDB-Install.git
+git clone https://github.com/nalinigans/GenomicsDB-Install.git
 docker build --build-arg os=ubuntu branch=develop install_dir=/home/$USER -t genomicsdb:develop
 ```
 
