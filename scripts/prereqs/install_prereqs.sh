@@ -53,4 +53,4 @@ install_prerequisites() {
 	install_protobuf
 }
 
-install_prerequisites
+install_prerequisites $1

@@ -1,22 +1,12 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]; then
-	echo "Usage ./install_genomicsdb.sh <user_name> <genomicsdb_branch> <install_dir> <bindings>"
-	echo "      argument <user_name> is mandatory, other arguments are optional"
-	exit 1
-fi
-
 GENOMICSDB_USER=${1:-genomicsdb}
-GENOMICSDB_BRANCH=${2:-master}
+GENOMICSDB_BRANCH=${2:-develop}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
+ENABLE_BINDINGS=$4
 
-if [ $# > 3 ] && [[ $4 == *java* ]]; then
-	BUILD_JAVA=1
-else
-	BUILD_JAVA=0
-fi
-
-GENOMICSDB_DIR=`eval echo ~$GENOMICSDB_USER`/GenomicsDB
+GENOMICSDB_USER_DIR=`eval echo ~$GENOMICSDB_USER`
+GENOMICSDB_DIR=$GENOMICSDB_USER_DIR/GenomicsDB
 echo GENOMICSDB_DIR=$GENOMICSDB_DIR
 
 build_genomicsdb() {
@@ -26,27 +16,55 @@ build_genomicsdb() {
 	git submodule update --recursive --init &&
 	mkdir build &&
 	cd build &&
-	cmake .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_JAVA=$BUILD_JAVA &&
+	if [[ $ENABLE_BINDINGS == *java* ]]; then
+		cmake .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_JAVA=1
+	else
+	  cmake .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR
+	fi
+
 	make -j 4 &&
 	make install &&
-	chown -R $GENOMICSDB_USER $GENOMICSDB_DIR &&
 	popd
 }
 
 setup_genomicsdb_env() {
 	GENOMICSDB_ENV=/etc/profile.d/genomicsdb_env.sh
 	echo "export GENOMICSDB_HOME=$GENOMICSDB_INSTALL_DIR" > $GENOMICSDB_ENV
-	if [[ $GENOMICSDB_INSTALL_DIR != "/usr" ]] &&  [[ $GENOMICSDB_INSTALL_DIR != "/usr/local" ]]; then
+	if [[ $GENOMICSDB_INSTALL_DIR != "/" ]] &&  [[ $GENOMICSDB_INSTALL_DIR != "/usr" ]]; then
 		echo "export PATH=\$GENOMICSDB_HOME/bin:\$PATH" >> $GENOMICSDB_ENV
 		echo "export LD_LIBRARY_PATH=\$GENOMICSDB_HOME/lib:\$LD_IBRARY_PATH" >> $GENOMICSDB_ENV
 		echo "export C_INCLUDE_PATH=\$GENOMICSDB_HOME/include" >> $GENOMICSDB_ENV
 	fi
-	if [ $BUILD_JAVA = 1 ]; then
+	if [[ $ENABLE_BINDINGS == *java* ]]; then
 			echo "export CLASSPATH=\$GENOMICSDB_HOME/bin:\$CLASSPATH" >> $GENOMICSDB_ENV
 	fi
 	. /etc/profile
 }
 
-build_genomicsdb &&
-setup_genomicsdb_env
 
+install_genomicsdb_python_bindings() {
+	echo ENABLE_BINDINGS=$ENABLE_BINDINGS
+	if  [[ $ENABLE_BINDINGS == *python* ]]; then
+		pushd $GENOMICSDB_USER_DIR
+		git clone https://github.com/nalinigans/GenomicsDB-Python.git -b develop
+		cd GenomicsDB-Python
+		virtualenv -p python3 env
+		source env/bin/activate > /dev/null
+		python setup.py build_ext --inplace --with-genomicsdb=$GENOMICSDB_HOME
+		deactivate
+		echo "export PYTHONPATH=\$PYTHONPATH:"`pwd` >> $GENOMICSDB_ENV
+		popd
+	fi
+}
+
+install_genomicsdb_r_bindings() {
+	if  [[ $ENABLE_BINDINGS == *r* ]]; then
+		echo "NOT YET IMPLEMENTED"
+	fi
+}
+
+build_genomicsdb &&
+setup_genomicsdb_env &&
+install_genomicsdb_python_bindings &&
+install_genomicsdb_r_bindings &&
+chown -R $GENOMICSDB_USER:$GENOMICSDB_USER $GENOMICSDB_USER_DIR
