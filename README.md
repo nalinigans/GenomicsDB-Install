@@ -27,8 +27,10 @@ To run and enter the bash shell:
 To build and copy all built artifacts from the docker image:
 ```
 export docker_os=centos
-docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t genomicsdb:build .
-docker create -it --name genomicsdb genomicsdb:build bash
+export docker_repo=genomicsdb
+export docker_tag=`date "+%Y-%m-%d-%H:%M:%S"`
+docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t $docker_repo:$docker_tag .
+docker create -it --name genomicsdb $docker_repo:$docker_tag bash
 docker cp genomicsdb:/tmp/artifacts $docker_os
 docker rm -fv genomicsdb
 ```
