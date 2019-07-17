@@ -2,7 +2,7 @@
 Experimental scripts to build and install [GenomicsDB](https://github.com/GenomicsDB/GenomicsDB). Support initially only for ubuntu and centos 7.
 
 ## With Docker
-To build and install GenomicsDB using Docker, specify the following optional build arguments
+To build and install GenomicsDB using Docker, specify the following *optional* build arguments
 
   | Build Argument | Default |
   | --- | --- |
