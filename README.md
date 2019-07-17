@@ -24,7 +24,7 @@ To run and enter the bash shell:
  docker run -it genomicsdb:develop
 ```
 
-To copy all built artifacts from the docker image:
+To build and copy all built artifacts from the docker image:
 ```
 export docker_os=centos
 docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t genomicsdb:build .
