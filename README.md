@@ -35,6 +35,12 @@ docker cp genomicsdb:/tmp/artifacts $docker_os
 docker rm -fv genomicsdb
 ```
 
+To delete docker images:
+```
+docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t $docker_repo:$docker_tag .
+docker image rm -f $docker_repo:$docker_tag
+```
+
 ## Directly from bash
 The two scripts [install_prereqs.sh](scripts/prereqs/install_prereqs.sh) and [install_genomicsdb.sh](scripts/install_genomicsdb.sh) will work on any Linux OS from a bash shell without Docker.
 
