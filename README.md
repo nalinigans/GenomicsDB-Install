@@ -39,6 +39,7 @@ To delete docker images:
 ```
 docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t $docker_repo:$docker_tag .
 docker image rm -f $docker_repo:$docker_tag
+docker system prune #optional
 ```
 
 ## Directly from bash
