@@ -10,22 +10,6 @@ install_openjdk8() {
 	popd
 }
 
-install_gcc4.9() {
-	apt-get install gcc-4.9 g++-4.9 -y &&
-        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 &&
-	update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 60
-}
-
-install_gcc4.8() {
-        apt-get install gcc-4.8 g++-4.8 -y &&
-        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 &&
-	update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 60
-}
-
-install_gcc() {
-	install_gcc4.9 || install_gcc4.8
-}
-
 install_prerequisites_ubuntu() {
 	apt-get update -q &&
 	apt-get -y install \
@@ -37,6 +21,7 @@ install_prerequisites_ubuntu() {
 					cmake \
 					uuid-dev \
 					libcurl4-openssl-dev \
+					build-essential \
 					software-properties-common \
 					wget \
 					git \
@@ -51,7 +36,6 @@ install_prerequisites_ubuntu() {
 	add-apt-repository ppa:ubuntu-toolchain-r/test -y &&
 	add-apt-repository -y ppa:openjdk-r/ppa &&
 	apt-get update -q &&
-	install_gcc &&
 	install_openjdk8 &&
 	apt-get clean &&
 	apt-get purge -y &&
