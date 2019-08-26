@@ -6,9 +6,9 @@ To build and install GenomicsDB using Docker, specify the following *optional* b
 
   | Build Argument | Default |
   | --- | --- |
-  | os=ubuntu:trusty|centos:7|<any linux base> | ubuntu:trusty |
+  | os=ubuntu:trusty\|centos:7\|\<linux_base:ver\> | centos:7 |
   | user=<user_name> | genomicdb |
-  | branch=master|develop|<any_branch> | master |
+  | branch=master\|develop\|<any_branch> | master |
   | install_dir=<my_install_dir> | /usr/local |
   | enable_bindings=java,r,python | none |
   
