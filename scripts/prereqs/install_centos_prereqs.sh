@@ -29,16 +29,16 @@ install_prerequisites_centos() {
 	install_devtoolset &&
 	install_openjdk &&
 	yum install -y autoconf automake libtool curl unzip &&
-  yum update -y autoconf &&
-  yum install -y epel-release &&
-  yum install -y libcsv libcsv-devel &&
-  yum install -y zlib-devel &&
+	yum update -y autoconf &&
+	yum install -y epel-release &&
+	yum install -y libcsv libcsv-devel &&
+	yum install -y zlib-devel &&
 	yum install -y openssl-devel &&
-  yum install -y libuuid libuuid-devel &&
+	yum install -y libuuid libuuid-devel &&
 	yum install -y python-pip &&
 	yum install -y python36-devel &&
 	pip install virtualenv &&
-  pip install jsondiff &&
+	pip install jsondiff &&
 	yum install -y lcov &&
-  yum install -y csv	
+	yum install -y csv
 }
