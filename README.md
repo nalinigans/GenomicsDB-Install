@@ -16,7 +16,7 @@ Examples:
 ```
 git clone https://github.com/nalinigans/GenomicsDB-Install.git
 cd GenomicsDB-Install
-docker build --build-arg os=ubuntu branch=develop install_dir=/home/$USER -t genomicsdb:build . 
+docker build --build-arg os=ubuntu --build-arg branch=develop --build-arg install_dir=/home/$USER -t genomicsdb:build . 
 ```
 
 To run and enter the bash shell:
