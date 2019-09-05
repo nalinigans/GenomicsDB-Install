@@ -3,27 +3,40 @@
 GENOMICSDB_USER=${1:-genomicsdb}
 GENOMICSDB_BRANCH=${2:-develop}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
-ENABLE_BINDINGS=$4
+BUILD_DISTRIBUTABLE_LIBRARY=$4
+ENABLE_BINDINGS=$5
 
 GENOMICSDB_USER_DIR=`eval echo ~$GENOMICSDB_USER`
 GENOMICSDB_DIR=$GENOMICSDB_USER_DIR/GenomicsDB
 echo GENOMICSDB_DIR=$GENOMICSDB_DIR
+
+if [[ BUILD_DISTRIBUTABLE_LIBRARY ]]; then
+		cmake3 && CMAKE=cmake3
+		cmake3 || CMAKE=cmake
+else
+	CMAKE=cmake
+fi
 
 build_genomicsdb() {
 	. /etc/profile &&
 	git clone https://github.com/GenomicsDB/GenomicsDB -b ${GENOMICSDB_BRANCH} $GENOMICSDB_DIR &&
 	pushd $GENOMICSDB_DIR &&
 	git submodule update --recursive --init &&
+	echo "Building GenomicsDB" &&
 	mkdir build &&
-	cd build &&
-	if [[ $ENABLE_BINDINGS == *java* ]]; then
-		cmake .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_JAVA=1
-	else
-	  cmake .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR
+	pushd build &&
+	$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR && make -j 4 && make install &&
+	popd &&
+	echo "Building GenomicsDB DONE"
+	if [[ $ENABLE_BINDINGS == *java* || $BUILD_DISTRIBUTABLE_LIBRARY ]]; then
+			echo "Building distributable GenomicsDB jars" &&
+			mkdir build.distr &&
+			pushd build.distr &&
+			$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_DISTRIBUTABLE_LIBRARY=1 -DBUILD_JAVA=1 &&
+			make -j 4 && make install &&
+			popd &&
+			echo "Building distributable GenomicsDB jars DONE"
 	fi
-
-	make -j 4 &&
-	make install &&
 	popd
 }
 
@@ -40,11 +53,10 @@ setup_genomicsdb_env() {
 	fi
 	. /etc/profile
 }
-
+<
 
 install_genomicsdb_python_bindings() {
-	echo ENABLE_BINDINGS=$ENABLE_BINDINGS
-	if  [[ $ENABLE_BINDINGS == *python* ]]; then
+	if [[ $ENABLE_BINDINGS == *python* ]]; then
 		pushd $GENOMICSDB_USER_DIR
 		git clone https://github.com/nalinigans/GenomicsDB-Python.git -b develop
 		cd GenomicsDB-Python

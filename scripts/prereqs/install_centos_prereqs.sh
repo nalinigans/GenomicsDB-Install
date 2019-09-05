@@ -40,5 +40,6 @@ install_prerequisites_centos() {
 	pip install virtualenv &&
 	pip install jsondiff &&
 	yum install -y lcov &&
-	yum install -y csv
+	yum install -y csv &&
+	yum install -y cmake3
 }

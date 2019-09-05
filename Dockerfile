@@ -32,17 +32,18 @@ ARG install_dir=/usr/local
 #e.g. enable_bindings="java"
 #     enable_bindings="java,r"
 #     enable_bindings="r,python"
+ARG distributable_jar=false
 ARG enable_bindings=""
 
 COPY scripts/prereqs /build
 WORKDIR /build
-RUN ./install_prereqs.sh ${enable_bindings}
+RUN ./install_prereqs.sh ${distributable_jar} ${enable_bindings}
 
 RUN groupadd -r genomicsdb && useradd -r -g genomicsdb -m ${user} -p ${user}
 
 COPY scripts/install_genomicsdb.sh /build
 WORKDIR /build
-RUN ./install_genomicsdb.sh ${user} ${branch} ${install_dir} ${enable_bindings}
+RUN ./install_genomicsdb.sh ${user} ${branch} ${install_dir} ${distributable_jar} ${enable_bindings}
 
 USER ${user}
 WORKDIR /home/${user}
