@@ -10,7 +10,7 @@ To build and install GenomicsDB using Docker, specify the following *optional* b
   | user=<user_name> | genomicdb |
   | branch=master\|develop\|<any_branch> | master |
   | install_dir=<my_install_dir> | /usr/local |
-  | distributable_library=<true\|false> | false |  
+  | distributable_library=true\|false | false |  
   | enable_bindings=java,r,python | none |
   
 Examples:
