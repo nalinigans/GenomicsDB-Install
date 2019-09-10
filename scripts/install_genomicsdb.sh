@@ -10,7 +10,7 @@ GENOMICSDB_USER_DIR=`eval echo ~$GENOMICSDB_USER`
 GENOMICSDB_DIR=$GENOMICSDB_USER_DIR/GenomicsDB
 echo GENOMICSDB_DIR=$GENOMICSDB_DIR
 
-if [[ BUILD_DISTRIBUTABLE_LIBRARY ]]; then
+if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
 		cmake3 && CMAKE=cmake3
 		cmake3 || CMAKE=cmake
 else
@@ -28,7 +28,7 @@ build_genomicsdb() {
 	$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR && make -j 4 && make install &&
 	popd &&
 	echo "Building GenomicsDB DONE"
-	if [[ $ENABLE_BINDINGS == *java* || $BUILD_DISTRIBUTABLE_LIBRARY ]]; then
+	if [[ $ENABLE_BINDINGS == *java* || $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
 			echo "Building distributable GenomicsDB jars" &&
 			mkdir build.distr &&
 			pushd build.distr &&
@@ -53,7 +53,6 @@ setup_genomicsdb_env() {
 	fi
 	. /etc/profile
 }
-<
 
 install_genomicsdb_python_bindings() {
 	if [[ $ENABLE_BINDINGS == *python* ]]; then
