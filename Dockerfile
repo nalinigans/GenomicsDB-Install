@@ -28,11 +28,11 @@ FROM $os
 ARG branch=master
 ARG user=genomicsdb
 ARG install_dir=/usr/local
+ARG distributable_jar=false
 #Options to enable_bindings are java, python and r - all separated by comma
 #e.g. enable_bindings="java"
 #     enable_bindings="java,r"
 #     enable_bindings="r,python"
-ARG distributable_jar=false
 ARG enable_bindings=""
 
 COPY scripts/prereqs /build

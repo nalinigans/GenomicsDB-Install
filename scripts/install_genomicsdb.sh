@@ -17,6 +17,12 @@ else
 	CMAKE=cmake
 fi
 
+if [[ $ENABLE_BINDINGS == *java* ||  $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
+	BUILD_JAVA=true
+else
+	BUILD_JAVA=false
+fi
+
 build_genomicsdb() {
 	. /etc/profile &&
 	git clone https://github.com/GenomicsDB/GenomicsDB -b ${GENOMICSDB_BRANCH} $GENOMICSDB_DIR &&
@@ -25,18 +31,10 @@ build_genomicsdb() {
 	echo "Building GenomicsDB" &&
 	mkdir build &&
 	pushd build &&
-	$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR && make -j 4 && make install &&
+	echo "	$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_DISTRIBUTABLE_LIBRARY=$DBUILD_DISTRIBUTABLE_LIBRARY -DBUILD_JAVA=$BUILD_JAVA" &&
+	$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_DISTRIBUTABLE_LIBRARY=$DBUILD_DISTRIBUTABLE_LIBRARY -DBUILD_JAVA=$BUILD_JAVA && make -j 4 && make install &&
 	popd &&
-	echo "Building GenomicsDB DONE"
-	if [[ $ENABLE_BINDINGS == *java* || $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
-			echo "Building distributable GenomicsDB jars" &&
-			mkdir build.distr &&
-			pushd build.distr &&
-			$CMAKE .. -DCMAKE_INSTALL_PREFIX=$GENOMICSDB_INSTALL_DIR -DBUILD_DISTRIBUTABLE_LIBRARY=1 -DBUILD_JAVA=1 &&
-			make -j 4 && make install &&
-			popd &&
-			echo "Building distributable GenomicsDB jars DONE"
-	fi
+	echo "Building GenomicsDB DONE" &&
 	popd
 }
 
