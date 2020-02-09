@@ -22,7 +22,8 @@ docker build --build-arg os=ubuntu --build-arg branch=develop --build-arg instal
 
 To run and enter the bash shell:
 ```
- docker run -it genomicsdb:develop
+# Use the -t argument value used with docker build ...
+docker run -it genomicsdb:build
 ```
 
 To build and copy all built artifacts from the docker image:
