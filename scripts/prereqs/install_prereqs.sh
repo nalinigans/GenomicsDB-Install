@@ -4,7 +4,7 @@ PREREQS_ENV=/etc/profile.d/prereqs.sh
 touch $PREREQS_ENV
 
 OPENSSL_VERSION=1.0.2o
-MAVEN_VERSION=3.6.1
+MAVEN_VERSION=3.6.3
 
 install_mvn() {
 	echo "Installing Maven"
