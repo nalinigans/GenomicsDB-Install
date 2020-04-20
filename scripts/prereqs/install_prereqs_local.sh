@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## Installation of mvn, protobuf, openssl, curl and uuid into $HOME
+
 OPENSSL_VERSION=1.0.2o
 MAVEN_VERSION=3.6.3
 
