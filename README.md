@@ -39,7 +39,7 @@ docker rm -fv genomicsdb
 
 To delete docker images:
 ```
-docker build --build-arg os=$docker_os install_dir=/tmp/artifacts -t $docker_repo:$docker_tag .
+docker build --build-arg os=$docker_os --build-arg install_dir=/tmp/artifacts -t $docker_repo:$docker_tag .
 docker image rm -f $docker_repo:$docker_tag
 docker system prune #optional
 ```
