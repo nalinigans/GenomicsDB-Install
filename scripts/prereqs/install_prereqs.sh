@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 PREREQS_ENV=/etc/profile.d/prereqs.sh
 touch $PREREQS_ENV
 

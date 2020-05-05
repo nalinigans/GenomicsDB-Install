@@ -1,11 +1,12 @@
 #!/bin/bash
 
+set -e
+
 install_devtoolset() {
 	echo "Installing devtoolset"
 	yum install -y centos-release-scl &&
-	yum-config-manager --enable rhel-server-rhscl-7-rpms &&
-	yum install -y devtoolset-6 &&
-	echo "source /opt/rh/devtoolset-6/enable" >> $PREREQS_ENV
+	yum install -y devtoolset-7 &&
+	echo "source /opt/rh/devtoolset-7/enable" >> $PREREQS_ENV
 }
 
 install_openjdk() {

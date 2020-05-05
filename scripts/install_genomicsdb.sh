@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 GENOMICSDB_USER=${1:-genomicsdb}
 GENOMICSDB_BRANCH=${2:-develop}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
