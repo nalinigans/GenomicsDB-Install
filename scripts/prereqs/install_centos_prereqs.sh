@@ -37,7 +37,6 @@ install_prerequisites_centos() {
 	yum install -y openssl-devel &&
 	yum install -y libuuid libuuid-devel &&
 	yum install -y python-pip &&
-	yum install -y python36-devel &&
 	pip install virtualenv &&
 	pip install jsondiff &&
 	yum install -y lcov &&
