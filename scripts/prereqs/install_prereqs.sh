@@ -2,11 +2,15 @@
 
 set -e
 
+BUILD_DISTRIBUTABLE_LIBRARY=${1:-false}
+
 PREREQS_ENV=/etc/profile.d/prereqs.sh
 touch $PREREQS_ENV
 
 OPENSSL_VERSION=1.0.2o
 MAVEN_VERSION=3.6.3
+
+CENTOS_VERSION=0
 
 install_mvn() {
 	echo "Installing Maven"
@@ -30,12 +34,19 @@ install_mvn() {
 install_protobuf() {
 	echo "Installing Protobuf"
 	pushd /tmp
-	git clone -b 3.0.x --single-branch https://github.com/google/protobuf.git &&
+	if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
+		wget -nv https://github.com/protocolbuffers/protobuf/releases/download/v3.0.0-beta-1/protobuf-cpp-3.0.0-beta-1.zip &&
+			unzip protobuf-cpp-3.0.0-beta-1.zip &&
+			cp /build/protobuf-v3.0.0-beta-1.autogen.sh.patch protobuf-3.0.0-beta-1/autogen.sh &&
+			mv protobuf-3.0.0-beta-1 protobuf
+	else
+		git clone -b 3.0.x https://github.com/google/protobuf.git
+	fi
 	pushd protobuf &&
-	./autogen.sh &&
-	./configure --prefix=/usr --with-pic &&
-	make -j4 && make install &&
-	echo "Installing Protobuf DONE"
+		./autogen.sh &&
+		./configure --prefix=/usr --with-pic &&
+		make -j4 && make install &&
+		echo "Installing Protobuf DONE"
 	popd
 	rm -fr /tmp/protobuf*
 	popd
@@ -82,12 +93,24 @@ install_uuid() {
 	rm -fr /tmp/libuuid*
 }
 
+centos_version() {
+	if [[ -f /etc/centos-release ]]; then
+    if grep -q "release 6" /etc/centos-release; then
+			CENTOS_VERSION=6
+		elif grep -q "release 7" /etc/centos-release; then
+			CENTOS_VERSION=7
+		elif grep -q "release 8" /etc/centos-release; then
+			CENTOS_VERSION=8
+		fi
+	fi
+}
+
 apt_get_install() {
 	apt-get --version && source install_ubuntu_prereqs.sh && install_prerequisites_ubuntu
 }
 
 yum_install() {
-	yum version && source install_centos_prereqs.sh && install_prerequisites_centos
+	source install_centos_prereqs.sh && install_prerequisites_centos
 }
 
 install_os_prerequisites() {
@@ -108,8 +131,14 @@ install_prerequisites() {
 	install_protobuf
 }
 
-install_prerequisites $2
-if [[ $1 ]]; then
+centos_version
+if [[ $BUILD_DISTRIBUTABLE_LIBRARY == false && $CENTOS_VERSION -eq 6 ]]; then
+	echo "Centos 6 is supported only when build-arg distributable_jar=true"
+	exit 1
+fi
+
+install_prerequisites $2 &&
+if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
 	echo "Installing static libraries"
 	install_openssl &&
 	install_curl &&

@@ -5,7 +5,7 @@ set -e
 GENOMICSDB_USER=${1:-genomicsdb}
 GENOMICSDB_BRANCH=${2:-develop}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
-BUILD_DISTRIBUTABLE_LIBRARY=$4
+BUILD_DISTRIBUTABLE_LIBRARY=${4:-false}
 ENABLE_BINDINGS=$5
 
 GENOMICSDB_USER_DIR=`eval echo ~$GENOMICSDB_USER`
@@ -25,11 +25,26 @@ else
 	BUILD_JAVA=false
 fi
 
+# Autoconf version 2.73 is the highest version supported by yum install on centos 6,
+# and 2.73 does not support m4_esyscmd_s in configure.ac.
+# obviously htslib is not supporting centos 6! so hardcoding something for now.
+repair_htslib() {
+	if [[ -f /etc/centos-release ]]; then
+		if grep -q "release 6" /etc/centos-release; then
+			pushd dependencies/htslib &&
+				VERSION=`./version.sh` &&
+				sed -i s/m4_esyscmd_s\(.*version.*\)/[$VERSION]/g configure.ac &&
+				popd
+		fi
+	fi
+}
+
 build_genomicsdb() {
 	. /etc/profile &&
 	git clone https://github.com/GenomicsDB/GenomicsDB -b ${GENOMICSDB_BRANCH} $GENOMICSDB_DIR &&
 	pushd $GENOMICSDB_DIR &&
 	git submodule update --recursive --init &&
+	repair_htslib &&
 	echo "Building GenomicsDB" &&
 	mkdir build &&
 	pushd build &&

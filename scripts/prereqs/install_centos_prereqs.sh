@@ -12,7 +12,6 @@ install_devtoolset() {
 install_openjdk() {
 	echo "Installing openjdk" &&
 	yum install -y java-1.8.0-openjdk-devel &&
-	echo "export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk" >> $PREREQS_ENV &&
 	echo "export JRE_HOME=/usr/lib/jvm/jre" >> $PREREQS_ENV
 }
 
@@ -29,7 +28,7 @@ install_prerequisites_centos() {
 	install_mpi &&
 	install_devtoolset &&
 	install_openjdk &&
-	yum install -y autoconf automake libtool curl unzip &&
+	yum install -y autoconf automake libtool curl libcurl-devel unzip &&
 	yum update -y autoconf &&
 	yum install -y epel-release &&
 	yum install -y libcsv libcsv-devel &&
