@@ -2,6 +2,11 @@
 
 set -e
 
+if [[ `uname` == "Darwin" ]]; then
+	echo "Run install_genomicsdb_on_mac.sh instead"
+	exit 1
+fi
+
 GENOMICSDB_USER=${1:-genomicsdb}
 GENOMICSDB_BRANCH=${2:-develop}
 GENOMICSDB_INSTALL_DIR=${3:-/usr/local}
@@ -13,8 +18,8 @@ GENOMICSDB_DIR=$GENOMICSDB_USER_DIR/GenomicsDB
 echo GENOMICSDB_DIR=$GENOMICSDB_DIR
 
 if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
-		cmake3 && CMAKE=cmake3
-		cmake3 || CMAKE=cmake
+	cmake3 && CMAKE=cmake3
+	cmake3 || CMAKE=cmake
 else
 	CMAKE=cmake
 fi

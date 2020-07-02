@@ -62,7 +62,7 @@ install_openssl() {
   make && make install && echo "Installing OpenSSL DONE"
 	popd
 	echo "export OPENSSL_ROOT_DIR=/usr/local/ssl" >>  $PREREQS_ENV
-  rm -fr /tmp/openss*l
+  rm -fr /tmp/openssl*
 }
 
 install_curl() {
