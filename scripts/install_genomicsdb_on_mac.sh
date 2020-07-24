@@ -2,6 +2,11 @@
 
 set -e 
 
+if [[ `uname` != "Darwin" ]]; then
+  echo "Run install_genomicsdb.sh instead"
+  exit 1
+fi
+
 # Install GenomicsDB Dependencies
 brew list cmake &>/dev/null || brew install cmake
 brew list mpich &>/dev/null || brew install mpich
