@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 install_devtoolset() {
 	echo "Installing devtoolset"
 	yum install -y centos-release-scl &&
@@ -23,22 +21,23 @@ install_mpi() {
 
 install_prerequisites_centos() {
 	yum update -y -q &&
-	yum install -y sudo &&
-	yum install -y -q which wget git make cmake cmake3 &&
-	install_mpi &&
-	install_devtoolset &&
-	install_openjdk &&
-	yum install -y autoconf automake libtool curl libcurl-devel unzip &&
-	yum update -y autoconf &&
-	yum install -y epel-release &&
-	yum install -y libcsv libcsv-devel &&
-	yum install -y zlib-devel &&
-	yum install -y openssl-devel &&
-	yum install -y libuuid libuuid-devel &&
-	yum install -y python-pip &&
-	pip install virtualenv &&
-	pip install jsondiff &&
-	yum install -y lcov &&
-	yum install -y csv &&
-	yum install -y cmake3
+	  yum install -y sudo &&
+	  yum install -y -q which wget git make &&
+	  install_mpi &&
+	  install_devtoolset &&
+	  install_openjdk &&
+	  yum install -y autoconf automake libtool unzip &&
+	  yum update -y autoconf &&
+	  yum install -y epel-release &&
+	  yum install -y zlib-devel &&
+	  yum install -y openssl-devel &&
+	  yum install -y libuuid libuuid-devel &&
+    yum install -y libcsv libcsv-devel &&
+    yum install -y csv &&
+	  yum install -y python-pip &&
+	  pip install virtualenv &&
+	  pip install jsondiff &&
+	  yum install -y lcov &&
+    yum install -y cmake3
+  yum install -y curl libcurl-devel
 }

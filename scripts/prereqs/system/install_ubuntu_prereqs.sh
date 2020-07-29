@@ -39,7 +39,6 @@ install_prerequisites_ubuntu() {
 						libssl-dev \
 						rsync \
 						libidn11 \
-						cmake \
 						uuid-dev \
 						libcurl4-openssl-dev \
 						build-essential \

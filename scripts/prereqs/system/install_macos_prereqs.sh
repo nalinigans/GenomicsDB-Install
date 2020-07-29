@@ -16,20 +16,20 @@ brew list automake &> /dev/null || brew install automake
 
 MAVEN_VERSION=3.6.3
 install_mvn() {
-  echo "Installing Maven"
-  MVN=`which mvn`
-  if [ -z $MVN ]; then
-    wget -nv https://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -P /tmp &&
-      tar xf /tmp/apache-maven-*.tar.gz -C $HOME &&
-      rm /tmp/apache-maven-*.tar.gz
-    ln -s $HOME/apache-maven-$MAVEN_VERSION $HOME/maven &&
-      MVN=$HOME/bin/mvn &&
-      test -f $MVN &&
-      echo "Installing Maven DONE"
-  fi
-  MVN_BIN_DIR=`dirname ${MVN}`
-  M2_HOME=`dirname ${MVN_BIN_DIR}`
-  export PATH=$M2_HOME/bin:$PATH
+    echo "Installing Maven"
+    MVN=`which mvn`
+    if [ -z $MVN ]; then
+        wget -nv https://www-us.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -P /tmp &&
+        tar xf /tmp/apache-maven-*.tar.gz -C $HOME &&
+        rm /tmp/apache-maven-*.tar.gz
+        ln -s $HOME/apache-maven-$MAVEN_VERSION $HOME/maven &&
+        MVN=$HOME/bin/mvn &&
+        test -f $MVN &&
+        echo "Installing Maven DONE"
+    fi
+    MVN_BIN_DIR=`dirname ${MVN}`
+    M2_HOME=`dirname ${MVN_BIN_DIR}`
+    export PATH=$M2_HOME/bin:$PATH
 }
 
 PROTOBUF_VERSION=3.0.0-beta-1
@@ -50,8 +50,8 @@ install_protobuf() {
     make -j4 && make install &&
     echo "Installing Protobuf DONE"
 	
-  popd
-  rm -fr /tmp/protobuf*
+    popd
+    rm -fr /tmp/protobuf*
 }
 
 OPENSSL_VERSION=1.0.2s
@@ -76,7 +76,7 @@ install_openssl() {
 
 set_cmake_env() {
 	export OPENSSL_ROOT_DIR=$OPENSSL_PREFIX
-  export CMAKE_PREFIX_PATH=$PROTOBUF_PREFIX:$OPENSSL_ROOT_DIR
+    export CMAKE_PREFIX_PATH=$PROTOBUF_PREFIX:$OPENSSL_ROOT_DIR
 }
 
 # Build GenomicsDB

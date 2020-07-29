@@ -17,12 +17,8 @@ GENOMICSDB_USER_DIR=`eval echo ~$GENOMICSDB_USER`
 GENOMICSDB_DIR=$GENOMICSDB_USER_DIR/GenomicsDB
 echo GENOMICSDB_DIR=$GENOMICSDB_DIR
 
-if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
-	cmake3 && CMAKE=cmake3
-	cmake3 || CMAKE=cmake
-else
-	CMAKE=cmake
-fi
+cmake3 && CMAKE=cmake3
+cmake3 || CMAKE=cmake
 
 if [[ $ENABLE_BINDINGS == *java* ||  $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
 	BUILD_JAVA=true
