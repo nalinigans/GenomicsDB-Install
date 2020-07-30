@@ -6,7 +6,7 @@ set -e
 #    $INSTALL_PREFIX allows for dependencies maven/protobuf/etc. that are built to be installed to $INSTALL_PREFIX for user installs
 #    $PRERES_ENV will set up file that can be sourced to set up the ENV for building GenomicsDB
 if [[ `uname` == "Darwin" || `id -u` -ne 0 ]]; then
-  INSTALL_PREFIX=${INSTALL_PREFIX:-$HOME}
+  INSTALL_PREFIX=${INSTALL_PREFIX:-$HOME/genomicsdb}
   MAVEN_INSTALL_PREFIX=INSTALL_PREFIX
   PREREQS_ENV=${PREREQS_ENV:-$HOME/genomicsdb_prereqs.sh}
   echo "GenomicsDB dependencies(e.g. maven, protobuf, etc. that are built from source will be installed to \$INSTALL_PREFIX=$INSTALL_PREFIX"
@@ -164,14 +164,19 @@ install_uuid() {
 }
 
 centos_version() {
-	if [[ -f /etc/centos-release ]]; then
-    if grep -q "release 6" /etc/centos-release; then
-			CENTOS_VERSION=6
-		elif grep -q "release 7" /etc/centos-release; then
-			CENTOS_VERSION=7
-		elif grep -q "release 8" /etc/centos-release; then
-			CENTOS_VERSION=8
-		fi
+  CENTOS_RELEASE_FILE=/etc/centos-release
+  if [[ ! -f $CENTOS_RELEASE_FILE ]]; then
+    CENTOS_RELEASE_FILE=/etc/redhat-release
+    if [[ ! -f $CENTOS_RELEASE_FILE ]]; then
+      return 0
+    fi
+  fi
+  if grep -q "release 6" $CENTOS_RELEASE_FILE; then
+		CENTOS_VERSION=6
+	elif grep -q "release 7" $CENTOS_RELEASE_FILE; then
+		CENTOS_VERSION=7
+	elif grep -q "release 8" $CENTOS_RELEASE_FILE; then
+		CENTOS_VERSION=8
 	fi
 }
 
@@ -204,21 +209,30 @@ install_prerequisites() {
 	  install_protobuf
 }
 
+finalize() {
+  echo
+  echo "--"
+  if [ $1 -ne 0 ]; then
+    echo "Error(s) encountered! Please check stderr and correct the errors before proceeding."
+  else
+    echo "Installing prerequisites DONE. The GenomicsDB env is written out at $PREREQS_ENV for subsequent usage - "
+    echo "    Invoke 'source $PREREQS_ENV' to setup environment for building GenomicsDB."
+  fi
+  return $1
+}
+
 centos_version
 if [[ $BUILD_DISTRIBUTABLE_LIBRARY == false && $CENTOS_VERSION -eq 6 ]]; then
 	echo "Centos 6 is supported only when build-arg distributable_jar=true"
 	exit 1
 fi
 
+RC=1
 install_prerequisites $2 &&
   if [[ $BUILD_DISTRIBUTABLE_LIBRARY == true ]]; then
 	  echo "Installing static libraries"
 	  install_openssl &&
 	    install_curl &&
 	    install_uuid
-  fi
-
-echo
-echo "--"
-echo "Installing prerequisites DONE. The GenomicsDB env is written out at $PREREQS_ENV for subsequent usage - "
-echo "    Invoke 'source $PREREQS_ENV' to setup environment for building GenomicsDB."
+  fi && RC=0
+finalize $RC

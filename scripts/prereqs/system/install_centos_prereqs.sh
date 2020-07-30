@@ -2,9 +2,15 @@
 
 install_devtoolset() {
 	echo "Installing devtoolset"
-	yum install -y centos-release-scl &&
-	yum install -y devtoolset-7 &&
-	echo "source /opt/rh/devtoolset-7/enable" >> $PREREQS_ENV
+  if [[ $CENTOS_VERSION -ge 8 ]]; then
+    yum -y makecache &&
+      yum -y grouplist &&
+      yum -y groupinstall "Development Tools"
+  else
+	  yum install -y centos-release-scl &&
+	    yum install -y devtoolset-7 &&
+	    echo "source /opt/rh/devtoolset-7/enable" >> $PREREQS_ENV
+  fi
 }
 
 install_openjdk() {
@@ -19,6 +25,30 @@ install_mpi() {
 	echo "export LD_LIBRARY_PATH=/usr/lib64:/usr/lib:\$LD_LIBRARY_PATH" >> $PREREQS_ENV
 }
 
+install_curl() {
+  yum install -y curl libcurl-devel
+  return 0
+}
+
+install_csv() {
+  if [[ $CENTOS_VERSION -lt 8 ]]; then 
+    yum install -y libcsv libcsv-devel &&
+      yum install -y csv
+  fi
+}
+
+install_test_prerequisites() {
+  if [[ $CENTOS_VERSION -ge 8 ]]; then
+    yum install -y python3 &&
+      pip3 install jsondiff
+  else
+	  yum install -y python-pip &&
+	    pip install virtualenv &&
+	    pip install jsondiff &&
+	    yum install -y lcov
+  fi
+}
+
 install_prerequisites_centos() {
 	yum update -y -q &&
 	  yum install -y sudo &&
@@ -31,13 +61,9 @@ install_prerequisites_centos() {
 	  yum install -y epel-release &&
 	  yum install -y zlib-devel &&
 	  yum install -y openssl-devel &&
+    yum install -y cmake3 &&
 	  yum install -y libuuid libuuid-devel &&
-    yum install -y libcsv libcsv-devel &&
-    yum install -y csv &&
-	  yum install -y python-pip &&
-	  pip install virtualenv &&
-	  pip install jsondiff &&
-	  yum install -y lcov &&
-    yum install -y cmake3
-  yum install -y curl libcurl-devel
+    install_csv &&
+    install_curl &&
+    install_test_prerequisites
 }
